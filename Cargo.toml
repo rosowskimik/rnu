@@ -6,6 +6,7 @@ version = "0.2.0"
 authors = ["Mikołaj Rosowski <m.rosowski1@wp.pl>"]
 edition = "2018"
 description = "Rename files to unique names"
+license-file = "LICENSE"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

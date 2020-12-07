@@ -70,27 +70,4 @@ fn main() -> Result<()> {
         }
     }
     Ok(())
-    // let old_file = Path::new(old_file);
-
-    // if !old_file.is_file() {
-    //     bail!("File doesn't exist!");
-    // }
-
-    // let parent_dir = old_file.parent().unwrap();
-
-    // let mut new_file = Uuid::new_v4().to_string();
-    // if let Some(val) = old_file.extension() {
-    //     new_file.push('.');
-    //     new_file.push_str(val.to_str().unwrap());
-    // }
-
-    // let new_file = parent_dir.join(new_file);
-
-    // fs::rename(old_file, &new_file).context("Failed to rename file")?;
-
-    // match (matches.is_present("quiet"), matches.is_present("verbose")) {
-    //     (false, true) => println!("{}", new_file.to_str().unwrap()),
-    //     (false, false) => println!("{}", new_file.file_name().unwrap().to_str().unwrap()),
-    //     _ => {}
-    // };
 }
