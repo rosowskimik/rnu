@@ -40,11 +40,7 @@ fn main() -> Result<()> {
     let quiet = matches.is_present("quiet");
     let copy = matches.is_present("copy");
     let append = matches.is_present("append");
-    let sign = if !quiet {
-        Some(if !copy { "->" } else { "+" })
-    } else {
-        None
-    };
+    let sign = if !copy { "->" } else { "+" };
 
     for infile in input_files {
         let infile_path = Path::new(infile);
@@ -74,9 +70,9 @@ fn main() -> Result<()> {
         match (file_result, quiet) {
             (Ok(_), false) => println!(
                 "{} {} {}",
-                infile_path.to_str().unwrap(),
-                sign.unwrap(),
-                outfile_path.to_str().unwrap()
+                infile_path.to_string_lossy(),
+                sign,
+                outfile_path.to_string_lossy()
             ),
             //
             (Err(e), _) => bail!(e),
