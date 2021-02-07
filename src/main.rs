@@ -2,8 +2,7 @@ use anyhow::bail;
 use anyhow::Result;
 use clap::{crate_authors, crate_description, crate_version};
 use clap::{App, Arg};
-use std::fs;
-use std::path::Path;
+use std::{ffi, fs, path::Path};
 use uuid::Uuid;
 
 fn main() -> Result<()> {
@@ -29,11 +28,18 @@ fn main() -> Result<()> {
                 .short("c")
                 .help("Copy <path> instead of renaming"),
         )
+        .arg(
+            Arg::with_name("append")
+                .long("append")
+                .short("a")
+                .help("Append to original name instead of replacing it"),
+        )
         .get_matches();
 
     let input_files = matches.values_of("path").unwrap();
     let quiet = matches.is_present("quiet");
     let copy = matches.is_present("copy");
+    let append = matches.is_present("append");
     let sign = if !quiet {
         Some(if !copy { "->" } else { "+" })
     } else {
@@ -44,10 +50,18 @@ fn main() -> Result<()> {
         let infile_path = Path::new(infile);
         let infile_ext = infile_path.extension();
 
-        let mut new_filename = Uuid::new_v4().to_string();
+        let mut new_filename = if append {
+            let old_filename = infile_path
+                .file_stem()
+                .unwrap_or_else(|| ffi::OsStr::new(""))
+                .to_string_lossy();
+            format!("{}-{}", old_filename, Uuid::new_v4().to_string())
+        } else {
+            Uuid::new_v4().to_string()
+        };
         if let Some(ext) = infile_ext {
             new_filename.push('.');
-            new_filename.push_str(ext.to_str().unwrap());
+            new_filename.push_str(&ext.to_string_lossy());
         }
 
         let outfile_path = infile_path.with_file_name(new_filename);
